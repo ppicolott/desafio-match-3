@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -12,7 +11,6 @@ public class ScoreManager : MonoBehaviour
     public LevelRules levelRules;
 
     public TMP_Text scoreText;
-
     public int tilesClearedCounter;
 
     private void Awake()
