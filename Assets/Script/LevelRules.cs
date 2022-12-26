@@ -4,6 +4,6 @@ using UnityEngine;
 public class LevelRules : ScriptableObject
 {
     public int pointsPerTile;
-    public float lineCleanerProbability;
-    public float othersProbability;
+    public float specialColorsProbability;
+    public float colorsProbability;
 }

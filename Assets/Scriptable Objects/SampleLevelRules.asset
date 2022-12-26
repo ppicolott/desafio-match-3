@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SampleLevelRules
   m_EditorClassIdentifier: 
   pointsPerTile: 10
-  lineCleanerProbability: 0.15
-  othersProbability: 1
+  specialColorsProbability: 0.1
+  colorsProbability: 1

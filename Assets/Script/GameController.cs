@@ -9,7 +9,7 @@ public class GameController
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
-        _tilesTypes = new List<int> { 0, 1, 2, 3, 7 };
+        _tilesTypes = new List<int> { 0, 1, 2, 3, 9, 11 };
         _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
         return _boardTiles;
     }
@@ -121,10 +121,10 @@ public class GameController
                         // int tileType = Random.Range(0, _tilesTypes.Count);
                         int _tileType = 0;
                         float _rand = Random.value;
-                        if (_rand <= ScoreManager.instance.levelRules.lineCleanerProbability)
+                        if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                             _tileType = Random.Range(0, _tilesTypes.Count);
-                        else if (_rand <= ScoreManager.instance.levelRules.othersProbability)
-                            _tileType = Random.Range(0, _tilesTypes.Count - 1);
+                        else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
+                            _tileType = Random.Range(0, _tilesTypes.Count - 2);
 
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
@@ -184,9 +184,9 @@ public class GameController
             {
                 for (int t = 0; t < newBoard.Count; t++)
                 {
-                    // On the X axis, if LineCleanTile (index: 7), clean line, is present and there is a match above 4:
+                    // On the X axis, if LineCleanTile (index: 11), clean line, is present and there is a match above 4:
                     if (x > 2
-                        && newBoard[y][t].type.ToString().StartsWith("7")
+                        && newBoard[y][t].type.ToString().StartsWith("11")
                         && newBoard[y][x].type == newBoard[y][x - 1].type
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type
                         && newBoard[y][x - 1].type == newBoard[y][x - 3].type)
@@ -196,7 +196,7 @@ public class GameController
                             matchedTiles[y][i] = true;
                         }
                     }
-                    // On the X axis, if LineCleanTile (index: 7), clean line, is not present or there is not a match above 4
+                    // On the X axis, if LineCleanTile (index: 11), clean line, is not present or there is not a match above 4
                     else
                     {
                         if (x > 1
@@ -211,9 +211,9 @@ public class GameController
                 }
                 for (int t = 0; t < newBoard.Count; t++)
                 {
-                    // On the Y axis, if LineCleanTile (index: 7), clean line, is present and there is a match above 4:
+                    // On the Y axis, if LineCleanTile (index: 11), clean line, is present and there is a match above 4:
                     if (y > 2
-                        && newBoard[t][x].type.ToString().StartsWith("7")
+                        && newBoard[t][x].type.ToString().StartsWith("11")
                         && newBoard[y][x].type == newBoard[y - 1][x].type
                         && newBoard[y - 1][x].type == newBoard[y - 2][x].type
                         && newBoard[y - 1][x].type == newBoard[y - 3][x].type)
@@ -223,7 +223,7 @@ public class GameController
                             matchedTiles[i][x] = true;
                         }
                     }
-                    // On the Y axis, if LineCleanTile (index: 7), clean line, is not present or there is not a match above 4
+                    // On the Y axis, if LineCleanTile (index: 11), clean line, is not present or there is not a match above 4
                     else
                     {
                         if (y > 1
@@ -317,13 +317,13 @@ public class GameController
                 // Original:
                 //board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
                 float _rand = Random.value;
-                if (_rand <= ScoreManager.instance.levelRules.lineCleanerProbability)
+                if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                 {
                     board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
                 }
-                else if (_rand <= ScoreManager.instance.levelRules.othersProbability)
+                else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 1)];
+                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 2)];
                 }
 
             }
