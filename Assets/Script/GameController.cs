@@ -121,7 +121,7 @@ public class GameController
                         // int tileType = Random.Range(0, _tilesTypes.Count);
                         int _tileType = 0;
                         float _rand = Random.value;
-                        if (_rand <= ScoreManager.instance.levelRules.orangeProbability)
+                        if (_rand <= ScoreManager.instance.levelRules.lineCleanerProbability)
                             _tileType = Random.Range(0, _tilesTypes.Count);
                         else if (_rand <= ScoreManager.instance.levelRules.othersProbability)
                             _tileType = Random.Range(0, _tilesTypes.Count - 1);
@@ -317,7 +317,7 @@ public class GameController
                 // Original:
                 //board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
                 float _rand = Random.value;
-                if (_rand <= ScoreManager.instance.levelRules.orangeProbability)
+                if (_rand <= ScoreManager.instance.levelRules.lineCleanerProbability)
                 {
                     board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
                 }
