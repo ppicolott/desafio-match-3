@@ -1,7 +1,24 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TileView : MonoBehaviour
+public class TileView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private Outline outline;
+
+    private void Awake()
+    {
+        outline = GetComponent<Outline>();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        outline.enabled = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        outline.enabled = false;
+    }
 }
