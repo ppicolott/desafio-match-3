@@ -9,7 +9,7 @@ public class GameController
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
-        _tilesTypes = new List<int> { 0, 1, 2, 3 };
+        _tilesTypes = new List<int> { 0, 1, 2, 3, 7 };
         _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
         return _boardTiles;
     }
@@ -100,7 +100,7 @@ public class GameController
                             }
                         }
                     }
-            
+
                     newBoard[0][x] = new Tile
                     {
                         id = -1,
@@ -117,15 +117,28 @@ public class GameController
                 {
                     if (newBoard[y][x].type == -1)
                     {
-                        int tileType = Random.Range(0, _tilesTypes.Count);
+                        // Original:
+                        // int tileType = Random.Range(0, _tilesTypes.Count);
+                        int _tileType = 0;
+                        float _rand = Random.value;
+                        if (_rand <= ScoreManager.instance.levelRules.orangeProbability)
+                            _tileType = Random.Range(0, _tilesTypes.Count);
+                        else if (_rand <= ScoreManager.instance.levelRules.othersProbability)
+                            _tileType = Random.Range(0, _tilesTypes.Count - 1);
+
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
-                        tile.type = _tilesTypes[tileType];
+                        // Original:
+                        //tile.type = _tilesTypes[tileType];
+                        tile.type = _tilesTypes[_tileType];
                         addedTiles.Add(new AddedTileInfo
                         {
                             position = new Vector2Int(x, y),
                             type = tile.type
                         });
+
+
+
                     }
                 }
             }
@@ -169,6 +182,64 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
+                for (int t = 0; t < newBoard.Count; t++)
+                {
+                    // On the X axis, if LineCleanTile (index: 7), clean line, is present and there is a match above 4:
+                    if (x > 2
+                        && newBoard[y][t].type.ToString().StartsWith("7")
+                        && newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 3].type)
+                    {
+                        for (int i = 0; i < newBoard.Count; i++)
+                        {
+                            matchedTiles[y][i] = true;
+                        }
+                    }
+                    // On the X axis, if LineCleanTile (index: 7), clean line, is not present or there is not a match above 4
+                    else
+                    {
+                        if (x > 1
+                            && newBoard[y][x].type == newBoard[y][x - 1].type
+                            && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
+                        {
+                            matchedTiles[y][x] = true;
+                            matchedTiles[y][x - 1] = true;
+                            matchedTiles[y][x - 2] = true;
+                        }
+                    }
+                }
+                for (int t = 0; t < newBoard.Count; t++)
+                {
+                    // On the Y axis, if LineCleanTile (index: 7), clean line, is present and there is a match above 4:
+                    if (y > 2
+                        && newBoard[t][x].type.ToString().StartsWith("7")
+                        && newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 1][x].type == newBoard[y - 3][x].type)
+                    {
+                        for (int i = 0; i < newBoard.Count; i++)
+                        {
+                            matchedTiles[i][x] = true;
+                        }
+                    }
+                    // On the Y axis, if LineCleanTile (index: 7), clean line, is not present or there is not a match above 4
+                    else
+                    {
+                        if (y > 1
+                            && newBoard[y][x].type == newBoard[y - 1][x].type
+                            && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
+                        {
+                            matchedTiles[y][x] = true;
+                            matchedTiles[y - 1][x] = true;
+                            matchedTiles[y - 2][x] = true;
+                        }
+                    }
+                }
+
+                /*
+                Original:
+                
                 if (x > 1
                     && newBoard[y][x].type == newBoard[y][x - 1].type
                     && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
@@ -185,6 +256,7 @@ public class GameController
                     matchedTiles[y - 1][x] = true;
                     matchedTiles[y - 2][x] = true;
                 }
+                */
             }
         }
 
@@ -242,7 +314,18 @@ public class GameController
                 }
 
                 board[y][x].id = _tileCount++;
-                board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                // Original:
+                //board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                float _rand = Random.value;
+                if (_rand <= ScoreManager.instance.levelRules.orangeProbability)
+                {
+                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                }
+                else if (_rand <= ScoreManager.instance.levelRules.othersProbability)
+                {
+                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 1)];
+                }
+
             }
         }
 

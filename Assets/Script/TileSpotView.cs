@@ -10,6 +10,8 @@ public class TileSpotView : MonoBehaviour
     private int _x;
     private int _y;
 
+    private int _name;
+
     public event Action<int, int> onClick;
 
     private void Awake()

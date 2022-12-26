@@ -4,4 +4,6 @@ using UnityEngine;
 public class LevelRules : ScriptableObject
 {
     public int pointsPerTile;
+    public float orangeProbability;
+    public float othersProbability;
 }

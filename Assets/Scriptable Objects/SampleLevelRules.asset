@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: SampleLevelRules
   m_EditorClassIdentifier: 
   pointsPerTile: 10
+  orangeProbability: 0.05
+  othersProbability: 1
