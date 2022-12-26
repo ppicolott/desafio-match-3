@@ -8,9 +8,9 @@ public class GameHandler : MonoBehaviour
 {
     [SerializeField] private GameController gameController;
 
-    [SerializeField] public int boardWidth = 20;
+    [SerializeField] public int boardWidth = 10;
 
-    [SerializeField] public int boardHeight = 20;
+    [SerializeField] public int boardHeight = 10;
 
     [SerializeField] public BoardView boardView;
 
@@ -89,5 +89,8 @@ public class GameHandler : MonoBehaviour
         {
             sequence.onComplete += () => onComplete();
         }
+
+        // Add points, after animation, to the score based on how many tiles were cleared/destroyed each sequence
+        ScoreManager.instance.AddScore(boardSequence.matchedPosition.Count);
     }
 }

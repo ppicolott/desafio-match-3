@@ -100,7 +100,7 @@ public class GameController
                             }
                         }
                     }
-
+            
                     newBoard[0][x] = new Tile
                     {
                         id = -1,
