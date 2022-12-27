@@ -26,18 +26,71 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
+
+                if (x > 2)
+                {
+                    if (newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 2].type == 11
+                        && newBoard[y][x].type == newBoard[y][x - 3].type)
+                    {
+                        return true;
+                    }
+                    else if (newBoard[y][x].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 1].type == 11
+                        && newBoard[y][x].type == newBoard[y][x - 3].type)
+                    {
+                        return true;
+                    }
+                }
+
                 if (x > 1
-                    && newBoard[y][x].type == newBoard[y][x - 1].type
-                    && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
+                        && newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
                 {
                     return true;
                 }
+
+
+                ////////////////////////
+
+
+                if (y > 2)
+                {
+                    if (newBoard[y][x].type == newBoard[y - 1][x].type
+                    && newBoard[y - 2][x].type == 11
+                    && newBoard[y][x].type == newBoard[y - 3][x].type)
+                    {
+                        return true;
+                    }
+                    else if (newBoard[y][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 1][x].type == 11
+                        && newBoard[y][x].type == newBoard[y - 3][x].type)
+                    {
+                        return true;
+                    }
+                }
+
                 if (y > 1
                     && newBoard[y][x].type == newBoard[y - 1][x].type
                     && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
                 {
                     return true;
                 }
+
+                // Original:
+                //
+                // if (x > 1
+                //     && newBoard[y][x].type == newBoard[y][x - 1].type
+                //     && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
+                // {
+                //     return true;
+                // }
+                // if (y > 1
+                //     && newBoard[y][x].type == newBoard[y - 1][x].type
+                //     && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
+                // {
+                //     return true;
+                // }
             }
         }
         return false;
@@ -136,9 +189,6 @@ public class GameController
                             position = new Vector2Int(x, y),
                             type = tile.type
                         });
-
-
-
                     }
                 }
             }
@@ -182,71 +232,73 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
-                for (int t = 0; t < newBoard.Count; t++)
-                {
-                    // On the X axis, if LineCleanTile (index: 11), clean line, is present and there is a match above 4:
-                    if (x > 2
-                        && newBoard[y][t].type.ToString().StartsWith("11")
-                        && newBoard[y][x].type == newBoard[y][x - 1].type
-                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
-                        && newBoard[y][x - 1].type == newBoard[y][x - 3].type)
-                    {
-                        for (int i = 0; i < newBoard.Count; i++)
-                        {
-                            matchedTiles[y][i] = true;
-                        }
-                    }
-                    // On the X axis, if LineCleanTile (index: 11), clean line, is not present or there is not a match above 4
-                    else
-                    {
-                        if (x > 1
-                            && newBoard[y][x].type == newBoard[y][x - 1].type
-                            && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
-                        {
-                            matchedTiles[y][x] = true;
-                            matchedTiles[y][x - 1] = true;
-                            matchedTiles[y][x - 2] = true;
-                        }
-                    }
-                }
-                for (int t = 0; t < newBoard.Count; t++)
-                {
-                    // On the Y axis, if LineCleanTile (index: 11), clean line, is present and there is a match above 4:
-                    if (y > 2
-                        && newBoard[t][x].type.ToString().StartsWith("11")
-                        && newBoard[y][x].type == newBoard[y - 1][x].type
-                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
-                        && newBoard[y - 1][x].type == newBoard[y - 3][x].type)
-                    {
-                        for (int i = 0; i < newBoard.Count; i++)
-                        {
-                            matchedTiles[i][x] = true;
-                        }
-                    }
-                    // On the Y axis, if LineCleanTile (index: 11), clean line, is not present or there is not a match above 4
-                    else
-                    {
-                        if (y > 1
-                            && newBoard[y][x].type == newBoard[y - 1][x].type
-                            && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
-                        {
-                            matchedTiles[y][x] = true;
-                            matchedTiles[y - 1][x] = true;
-                            matchedTiles[y - 2][x] = true;
-                        }
-                    }
-                }
 
-                /*
-                Original:
-                
+                if (x > 2)
+                {
+                    if (newBoard[y][x].type == 11
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 2].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 1].type == 11
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 2].type == 11
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 3].type == 11)
+                    {
+                        for (int t = 0; t < newBoard.Count; t++)
+                        {
+                            for (int i = 0; i < newBoard.Count; i++)
+                            {
+                                matchedTiles[y][i] = true;
+                            }
+                        }
+                    }
+                }
                 if (x > 1
-                    && newBoard[y][x].type == newBoard[y][x - 1].type
-                    && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
+                        && newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
                 {
                     matchedTiles[y][x] = true;
                     matchedTiles[y][x - 1] = true;
                     matchedTiles[y][x - 2] = true;
+                }
+
+
+                ////////////////////////
+
+
+                if (y > 2)
+                {
+                    if (newBoard[y][x].type == 11
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 2][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 1][x].type == 11
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 2][x].type == 11
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 3][x].type == 11)
+                    {
+                        for (int t = 0; t < newBoard.Count; t++)
+                        {
+                            for (int i = 0; i < newBoard.Count; i++)
+                            {
+                                matchedTiles[i][x] = true;
+                            }
+                        }
+                    }
                 }
                 if (y > 1
                     && newBoard[y][x].type == newBoard[y - 1][x].type
@@ -256,8 +308,28 @@ public class GameController
                     matchedTiles[y - 1][x] = true;
                     matchedTiles[y - 2][x] = true;
                 }
-                */
             }
+
+            /*
+            Original:
+
+            if (x > 1
+                && newBoard[y][x].type == newBoard[y][x - 1].type
+                && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
+            {
+                matchedTiles[y][x] = true;
+                matchedTiles[y][x - 1] = true;
+                matchedTiles[y][x - 2] = true;
+            }
+            if (y > 1
+                && newBoard[y][x].type == newBoard[y - 1][x].type
+                && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
+            {
+                matchedTiles[y][x] = true;
+                matchedTiles[y - 1][x] = true;
+                matchedTiles[y - 2][x] = true;
+            }
+            */
         }
 
         return matchedTiles;
@@ -303,12 +375,18 @@ public class GameController
                 }
 
                 if (x > 1
-                    && board[y][x - 1].type == board[y][x - 2].type)
+                    && board[y][x - 1].type == board[y][x - 2].type
+                    ||
+                    x > 1
+                    && board[y][x - 2].type == 11)
                 {
                     noMatchTypes.Remove(board[y][x - 1].type);
                 }
                 if (y > 1
-                    && board[y - 1][x].type == board[y - 2][x].type)
+                    && board[y - 1][x].type == board[y - 2][x].type
+                    ||
+                    y > 1
+                    && board[y - 2][x].type == 11)
                 {
                     noMatchTypes.Remove(board[y - 1][x].type);
                 }
