@@ -375,20 +375,31 @@ public class GameController
                 }
 
                 if (x > 1
-                    && board[y][x - 1].type == board[y][x - 2].type
-                    ||
-                    x > 1
-                    && board[y][x - 2].type == 11)
+                    && board[y][x - 1].type == board[y][x - 2].type)
                 {
                     noMatchTypes.Remove(board[y][x - 1].type);
                 }
                 if (y > 1
-                    && board[y - 1][x].type == board[y - 2][x].type
-                    ||
-                    y > 1
-                    && board[y - 2][x].type == 11)
+                    && board[y - 1][x].type == board[y - 2][x].type)
                 {
                     noMatchTypes.Remove(board[y - 1][x].type);
+                }
+
+                if (x > 2
+                   && board[y][x - 2].type == 11
+                   ||
+                   x > 2
+                   && board[y][x - 3].type == 11)
+                {
+                    noMatchTypes.Remove(board[y][x - 2].type);
+                }
+                if (y > 2
+                    && board[y - 2][x].type == 11
+                    ||
+                    y > 2
+                    && board[y - 3][x].type == 11)
+                {
+                    noMatchTypes.Remove(board[y - 2][x].type);
                 }
 
                 board[y][x].id = _tileCount++;
