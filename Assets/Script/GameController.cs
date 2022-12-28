@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class GameController
 {
@@ -11,7 +13,13 @@ public class GameController
     private int commonColorsTrue = 0;
     private List<bool> specialColors;
     private int specialColorsTrue = 0;
+
     private List<bool> designedColors;
+    private List<int> levelColors;
+    private List<int> commonLevelColors;
+    private List<int> specialLevelColors;
+    private int commonListIndex;
+    private int specialListIndex;
 
     private static int colorNumber;
     private static int specialColorNumber;
@@ -23,7 +31,7 @@ public class GameController
     private static int pinkNumber = 4;
     private static int purpleNumber = 5;
     private static int redNumber = 6;
-            
+
     private static int specialYellowNumber = 7;
     private static int specialBlueNumber = 8;
     private static int specialGreenNumber = 9;
@@ -32,12 +40,13 @@ public class GameController
     private static int specialPurpleNumber = 12;
     private static int specialRedNumber = 13;
 
-    private static int lineCleaner = 14;
-    private static int bomb = 15;
+    // private static int lineCleaner = 14;
+    // private static int bomb = 15;
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
         // Defining probability of common colors being displayed
+        commonLevelColors = new List<int>();
         commonColors = new List<bool>()
         {
             ScoreManager.instance.levelRules.yellow,
@@ -53,10 +62,12 @@ public class GameController
             if (commonColors[i])
             {
                 commonColorsTrue += 1;
+                commonLevelColors.Add(i);
             }
         }
 
         // Defining probability of special colors being displayed
+        specialLevelColors = new List<int>();
         specialColors = new List<bool>()
         {
             ScoreManager.instance.levelRules.specialYellow,
@@ -74,6 +85,7 @@ public class GameController
             if (specialColors[i])
             {
                 specialColorsTrue += 1;
+                specialLevelColors.Add(i);
             }
         }
 
@@ -98,7 +110,7 @@ public class GameController
             ScoreManager.instance.levelRules.bomb,
         };
 
-        List<int> levelColors = new List<int>();
+        levelColors = new List<int>();
         for (int i = 0; i < designedColors.Count; i++)
         {
             if (designedColors[i])
@@ -215,6 +227,25 @@ public class GameController
                         return true;
                     }
 
+                    if (newBoard[y][x].type == 15
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 2].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 1].type == 15
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 2].type == 15
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 3].type == 15)
+                    {
+                        return true;
+                    }
+
                     if (newBoard[y][x].type == specialColorNumber
                         && newBoard[y][x - 1].type == colorNumber
                         && newBoard[y][x - 2].type == colorNumber
@@ -261,6 +292,25 @@ public class GameController
                     else if (newBoard[y][x].type == newBoard[y - 2][x].type
                         && newBoard[y - 1][x].type == 14
                         && newBoard[y][x].type == newBoard[y - 3][x].type)
+                    {
+                        return true;
+                    }
+
+                    if (newBoard[y][x].type == 15
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 2][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 1][x].type == 15
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 2][x].type == 15
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 3][x].type == 15)
                     {
                         return true;
                     }
@@ -374,20 +424,29 @@ public class GameController
                 {
                     if (newBoard[y][x].type == -1)
                     {
+
                         // Original:
                         // int tileType = Random.Range(0, _tilesTypes.Count);
+
                         int _tileType = 0;
+                        int a = levelColors[Random.Range(4, 8)];
+                        int b = levelColors[Random.Range(0, 4)];
+
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
-                            _tileType = Random.Range(0, specialColorsTrue);
+                        {
+                            _tileType = a;
+                        }
                         else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
-                            _tileType = Random.Range(0, commonColorsTrue);
+                        {
+                            _tileType = b;
+                        }
 
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
                         // Original:
-                        //tile.type = _tilesTypes[tileType];
-                        tile.type = _tilesTypes[_tileType];
+                        //tile.type = _tilesTypes[_tileType];
+                        tile.type = _tileType;
                         addedTiles.Add(new AddedTileInfo
                         {
                             position = new Vector2Int(x, y),
@@ -524,11 +583,63 @@ public class GameController
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type
                         && newBoard[y][x - 3].type == 14)
                     {
-                        for (int t = 0; t < newBoard.Count; t++)
+                        for (int j = 0; j < newBoard.Count; j++)
                         {
                             for (int i = 0; i < newBoard.Count; i++)
                             {
                                 matchedTiles[y][i] = true;
+                            }
+                        }
+                    }
+
+                    if (newBoard[y][x].type == 15
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 2].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 1].type == 15
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 2].type == 15
+                        && newBoard[y][x].type == newBoard[y][x - 3].type
+                        ||
+                        newBoard[y][x].type == newBoard[y][x - 1].type
+                        && newBoard[y][x - 1].type == newBoard[y][x - 2].type
+                        && newBoard[y][x - 3].type == 15)
+                    {
+                        int bombRange = 0;
+
+                        if (y > 3 && x > 3)
+                        {
+                            bombRange = 2;
+                        }
+                        else if (y == 0 || x == 0)
+                        {
+                            bombRange = 0;
+                        }
+                        else if (y == 10 || x == 10)
+                        {
+                            bombRange = 0;
+                        }
+                        else
+                        {
+                            bombRange = 1;
+                        }
+
+                        for (int j = y - bombRange; j < y + bombRange; j++)
+                        {
+                            for (int i = x - bombRange; i < x + bombRange; i++)
+                            {
+                                matchedTiles[j][i] = true;
+                            }
+                        }
+
+                        for (int n = 0; n < 4; n++)
+                        {
+                            if (newBoard[y][x - n].type == 15)
+                            {
+                                matchedTiles[y][x - n] = true;
                             }
                         }
                     }
@@ -595,11 +706,63 @@ public class GameController
                         && newBoard[y - 1][x].type == newBoard[y - 2][x].type
                         && newBoard[y - 3][x].type == 14)
                     {
-                        for (int t = 0; t < newBoard.Count; t++)
+                        for (int j = 0; j < newBoard.Count; j++)
                         {
                             for (int i = 0; i < newBoard.Count; i++)
                             {
                                 matchedTiles[i][x] = true;
+                            }
+                        }
+                    }
+
+                    if (newBoard[y][x].type == 15
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 2][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 1][x].type == 15
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 2][x].type == 15
+                        && newBoard[y][x].type == newBoard[y - 3][x].type
+                        ||
+                        newBoard[y][x].type == newBoard[y - 1][x].type
+                        && newBoard[y - 1][x].type == newBoard[y - 2][x].type
+                        && newBoard[y - 3][x].type == 15)
+                    {
+                        int bombRange = 0;
+
+                        if (y > 3 && x > 3)
+                        {
+                            bombRange = 2;
+                        }
+                        else if (y == 0 || x == 0)
+                        {
+                            bombRange = 0;
+                        }
+                        else if (y == 10 || x == 10)
+                        {
+                            bombRange = 0;
+                        }
+                        else
+                        {
+                            bombRange = 1;
+                        }
+
+                        for (int j = y - bombRange; j < y + bombRange; j++)
+                        {
+                            for (int i = x - bombRange; i < x + bombRange; i++)
+                            {
+                                matchedTiles[j][i] = true;
+                            }
+                        }
+
+                        for (int n = 0; n < 4; n++)
+                        {
+                            if (newBoard[y - n][x].type == 15)
+                            {
+                                matchedTiles[y - n][x] = true;
                             }
                         }
                     }
@@ -720,18 +883,33 @@ public class GameController
                 }
 
                 board[y][x].id = _tileCount++;
+
+
                 // Original:
                 //board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+
+                int randomSpecialColor = specialLevelColors[Random.Range(0, specialColorsTrue)];
+                int randomCommonColor = commonLevelColors[Random.Range(0, commonColorsTrue)];
+                foreach (int item in levelColors)
+                {
+                    if (item == randomSpecialColor)
+                    {
+                        specialListIndex = levelColors.IndexOf(item);
+                    }
+                    if (item == randomCommonColor)
+                    {
+                        commonListIndex = levelColors.IndexOf(item);
+                    }
+                }
                 float _rand = Random.value;
                 if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, specialColorsTrue)];
+                    board[y][x].type = noMatchTypes[specialListIndex];
                 }
                 else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, commonColorsTrue)];
+                    board[y][x].type = noMatchTypes[commonListIndex];
                 }
-
             }
         }
 
