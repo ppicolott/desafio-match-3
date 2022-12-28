@@ -429,17 +429,20 @@ public class GameController
                         // int tileType = Random.Range(0, _tilesTypes.Count);
 
                         int _tileType = 0;
-                        int a = levelColors[Random.Range(4, 8)];
-                        int b = levelColors[Random.Range(0, 4)];
+
+                        int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
+
+                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
+                        int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
 
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                         {
-                            _tileType = a;
+                            _tileType = _randomSpecialColor;
                         }
                         else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                         {
-                            _tileType = b;
+                            _tileType = _randomCommonColor;
                         }
 
                         Tile tile = newBoard[y][x];
@@ -886,17 +889,20 @@ public class GameController
 
 
                 // Original:
-                //board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                // board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
 
-                int randomSpecialColor = specialLevelColors[Random.Range(0, specialColorsTrue)];
-                int randomCommonColor = commonLevelColors[Random.Range(0, commonColorsTrue)];
+                int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
+                
+                int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
+                int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
+
                 foreach (int item in levelColors)
                 {
-                    if (item == randomSpecialColor)
+                    if (item == _randomSpecialColor)
                     {
                         specialListIndex = levelColors.IndexOf(item);
                     }
-                    if (item == randomCommonColor)
+                    if (item == _randomCommonColor)
                     {
                         commonListIndex = levelColors.IndexOf(item);
                     }
