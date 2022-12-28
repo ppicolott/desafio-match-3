@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7770807943184121083}
   - component: {fileID: 4428178498716353988}
   - component: {fileID: 4993933492126411208}
-  - component: {fileID: -4872198031592944868}
+  - component: {fileID: 1516077274629835098}
   m_Layer: 5
   m_Name: SpecialGreenTile
   m_TagString: Untagged
@@ -89,14 +89,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fed8ab3f2075b44299f89a74779b00e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-4872198031592944868
+--- !u!114 &1516077274629835098
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3289974818467498821}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 

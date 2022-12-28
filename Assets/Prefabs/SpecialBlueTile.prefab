@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6531493210781432195}
   - component: {fileID: 9015394530975744411}
   - component: {fileID: 8595690258952077401}
-  - component: {fileID: 1055367824356355898}
+  - component: {fileID: -464423936422993905}
   m_Layer: 5
   m_Name: SpecialBlueTile
   m_TagString: Untagged
@@ -89,14 +89,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fed8ab3f2075b44299f89a74779b00e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1055367824356355898
+--- !u!114 &-464423936422993905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6588062894895293356}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
