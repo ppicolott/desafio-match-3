@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameController
@@ -8,6 +6,12 @@ public class GameController
     private List<List<Tile>> _boardTiles;
     private List<int> _tilesTypes;
     private int _tileCount;
+
+    private List<bool> commonColors;
+    private int commonColorsTrue = 0;
+    private List<bool> specialColors;
+    private int specialColorsTrue = 0;
+    private List<bool> designedColors;
 
     private static int colorNumber;
     private static int specialColorNumber;
@@ -33,7 +37,48 @@ public class GameController
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
-        List<bool> designedColors = new List<bool>()
+        // Defining probability of common colors being displayed
+        commonColors = new List<bool>()
+        {
+            ScoreManager.instance.levelRules.yellow,
+            ScoreManager.instance.levelRules.blue,
+            ScoreManager.instance.levelRules.green,
+            ScoreManager.instance.levelRules.orange,
+            ScoreManager.instance.levelRules.pink,
+            ScoreManager.instance.levelRules.purple,
+            ScoreManager.instance.levelRules.red,
+        };
+        for (int i = 0; i < commonColors.Count; i++)
+        {
+            if (commonColors[i])
+            {
+                commonColorsTrue += 1;
+            }
+        }
+
+        // Defining probability of special colors being displayed
+        specialColors = new List<bool>()
+        {
+            ScoreManager.instance.levelRules.specialYellow,
+            ScoreManager.instance.levelRules.specialBlue,
+            ScoreManager.instance.levelRules.specialGreen,
+            ScoreManager.instance.levelRules.specialOrange,
+            ScoreManager.instance.levelRules.specialPink,
+            ScoreManager.instance.levelRules.specialPurple,
+            ScoreManager.instance.levelRules.specialRed,
+            ScoreManager.instance.levelRules.lineCleaner,
+            ScoreManager.instance.levelRules.bomb,
+        };
+        for (int i = 0; i < specialColors.Count; i++)
+        {
+            if (specialColors[i])
+            {
+                specialColorsTrue += 1;
+            }
+        }
+
+        // Adding color index to _tilesTypes, in order to display only selected colors
+        designedColors = new List<bool>()
         {
             ScoreManager.instance.levelRules.yellow,
             ScoreManager.instance.levelRules.blue,
@@ -67,7 +112,7 @@ public class GameController
         // }
 
         // Original:
-        // _tilesTypes = new List<int> { 0, 1, 2, 3, 9, 10, 14 };
+        // _tilesTypes = new List<int> { 0, 1, 2, 3, };
         _tilesTypes = levelColors;
         _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
         return _boardTiles;
@@ -334,9 +379,9 @@ public class GameController
                         int _tileType = 0;
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
-                            _tileType = Random.Range(4, _tilesTypes.Count);
+                            _tileType = Random.Range(0, specialColorsTrue);
                         else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
-                            _tileType = Random.Range(0, _tilesTypes.Count - 4);
+                            _tileType = Random.Range(0, commonColorsTrue);
 
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
@@ -680,11 +725,11 @@ public class GameController
                 float _rand = Random.value;
                 if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(4, noMatchTypes.Count)];
+                    board[y][x].type = noMatchTypes[Random.Range(0, specialColorsTrue)];
                 }
                 else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 4)];
+                    board[y][x].type = noMatchTypes[Random.Range(0, commonColorsTrue)];
                 }
 
             }
