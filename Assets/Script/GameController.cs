@@ -29,6 +29,7 @@ public class GameController
     private static int specialRedNumber = 13;
 
     private static int lineCleaner = 14;
+    private static int bomb = 15;
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
@@ -49,6 +50,7 @@ public class GameController
             ScoreManager.instance.levelRules.specialPurple,
             ScoreManager.instance.levelRules.specialRed,
             ScoreManager.instance.levelRules.lineCleaner,
+            ScoreManager.instance.levelRules.bomb,
         };
 
         List<int> levelColors = new List<int>();
@@ -139,6 +141,14 @@ public class GameController
                         break;
                     case 13:
                         colorNumber = specialRedNumber;
+                        specialColorNumber = specialRedNumber;
+                        break;
+                    case 14:
+                        colorNumber = 14;
+                        specialColorNumber = -1;
+                        break;
+                    case 15:
+                        colorNumber = 15;
                         specialColorNumber = -1;
                         break;
                 }
@@ -324,9 +334,9 @@ public class GameController
                         int _tileType = 0;
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
-                            _tileType = Random.Range(0 + 4, _tilesTypes.Count);
+                            _tileType = Random.Range(4, _tilesTypes.Count);
                         else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
-                            _tileType = Random.Range(0, _tilesTypes.Count - 3);
+                            _tileType = Random.Range(0, _tilesTypes.Count - 4);
 
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
@@ -437,6 +447,14 @@ public class GameController
                         break;
                     case 13:
                         colorNumber = specialRedNumber;
+                        specialColorNumber = specialRedNumber;
+                        break;
+                    case 14:
+                        colorNumber = 14;
+                        specialColorNumber = -1;
+                        break;
+                    case 15:
+                        colorNumber = 15;
                         specialColorNumber = -1;
                         break;
                 }
@@ -662,11 +680,11 @@ public class GameController
                 float _rand = Random.value;
                 if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0 + 4, noMatchTypes.Count)];
+                    board[y][x].type = noMatchTypes[Random.Range(4, noMatchTypes.Count)];
                 }
                 else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 3)];
+                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 4)];
                 }
 
             }

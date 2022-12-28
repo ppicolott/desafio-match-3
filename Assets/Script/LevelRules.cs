@@ -36,4 +36,5 @@ public class LevelRules : ScriptableObject
     [Header("Special Tricks")]
     [Space(5)]
     public bool lineCleaner;
+    public bool bomb;
 }
