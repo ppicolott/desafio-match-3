@@ -13,5 +13,20 @@ MonoBehaviour:
   m_Name: SampleLevelRules
   m_EditorClassIdentifier: 
   pointsPerTile: 10
-  specialColorsProbability: 0.1
+  specialColorsProbability: 0.025
   colorsProbability: 1
+  yellow: 1
+  blue: 1
+  green: 1
+  orange: 1
+  pink: 0
+  purple: 0
+  red: 0
+  specialYellow: 1
+  specialBlue: 1
+  specialGreen: 0
+  specialOrange: 0
+  specialPink: 0
+  specialPurple: 0
+  specialRed: 0
+  lineCleaner: 1

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GameController
@@ -7,9 +9,64 @@ public class GameController
     private List<int> _tilesTypes;
     private int _tileCount;
 
+    private static int colorNumber;
+    private static int specialColorNumber;
+
+    private static int yellowNumber = 0;
+    private static int blueNumber = 1;
+    private static int greenNumber = 2;
+    private static int orangeNumber = 3;
+    private static int pinkNumber = 4;
+    private static int purpleNumber = 5;
+    private static int redNumber = 6;
+            
+    private static int specialYellowNumber = 7;
+    private static int specialBlueNumber = 8;
+    private static int specialGreenNumber = 9;
+    private static int specialOrangeNumber = 10;
+    private static int specialPinkNumber = 11;
+    private static int specialPurpleNumber = 12;
+    private static int specialRedNumber = 13;
+
+    private static int lineCleaner = 14;
+
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
-        _tilesTypes = new List<int> { 0, 1, 2, 3, 9, 11 };
+        List<bool> designedColors = new List<bool>()
+        {
+            ScoreManager.instance.levelRules.yellow,
+            ScoreManager.instance.levelRules.blue,
+            ScoreManager.instance.levelRules.green,
+            ScoreManager.instance.levelRules.orange,
+            ScoreManager.instance.levelRules.pink,
+            ScoreManager.instance.levelRules.purple,
+            ScoreManager.instance.levelRules.red,
+            ScoreManager.instance.levelRules.specialYellow,
+            ScoreManager.instance.levelRules.specialBlue,
+            ScoreManager.instance.levelRules.specialGreen,
+            ScoreManager.instance.levelRules.specialOrange,
+            ScoreManager.instance.levelRules.specialPink,
+            ScoreManager.instance.levelRules.specialPurple,
+            ScoreManager.instance.levelRules.specialRed,
+            ScoreManager.instance.levelRules.lineCleaner,
+        };
+
+        List<int> levelColors = new List<int>();
+        for (int i = 0; i < designedColors.Count; i++)
+        {
+            if (designedColors[i])
+            {
+                levelColors.Add(i);
+            }
+        }
+        // foreach (int item in levelColors)
+        // {
+        //     Debug.Log(item);
+        // }
+
+        // Original:
+        // _tilesTypes = new List<int> { 0, 1, 2, 3, 9, 10, 14 };
+        _tilesTypes = levelColors;
         _boardTiles = CreateBoard(boardWidth, boardHeight, _tilesTypes);
         return _boardTiles;
     }
@@ -26,18 +83,102 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
+                switch (newBoard[y][x].type)
+                {
+                    case 0:
+                        colorNumber = yellowNumber;
+                        specialColorNumber = specialYellowNumber;
+                        break;
+                    case 1:
+                        colorNumber = blueNumber;
+                        specialColorNumber = specialBlueNumber;
+                        break;
+                    case 2:
+                        colorNumber = greenNumber;
+                        specialColorNumber = specialGreenNumber;
+                        break;
+                    case 3:
+                        colorNumber = orangeNumber;
+                        specialColorNumber = specialOrangeNumber;
+                        break;
+                    case 4:
+                        colorNumber = pinkNumber;
+                        specialColorNumber = specialPinkNumber;
+                        break;
+                    case 5:
+                        colorNumber = purpleNumber;
+                        specialColorNumber = specialPurpleNumber;
+                        break;
+                    case 6:
+                        colorNumber = redNumber;
+                        specialColorNumber = specialRedNumber;
+                        break;
+                    case 7:
+                        colorNumber = specialYellowNumber;
+                        specialColorNumber = specialYellowNumber;
+                        break;
+                    case 8:
+                        colorNumber = specialBlueNumber;
+                        specialColorNumber = specialBlueNumber;
+                        break;
+                    case 9:
+                        colorNumber = specialGreenNumber;
+                        specialColorNumber = specialGreenNumber;
+                        break;
+                    case 10:
+                        colorNumber = specialOrangeNumber;
+                        specialColorNumber = specialOrangeNumber;
+                        break;
+                    case 11:
+                        colorNumber = specialPinkNumber;
+                        specialColorNumber = specialPinkNumber;
+                        break;
+                    case 12:
+                        colorNumber = specialPurpleNumber;
+                        specialColorNumber = specialPurpleNumber;
+                        break;
+                    case 13:
+                        colorNumber = specialRedNumber;
+                        specialColorNumber = -1;
+                        break;
+                }
+
+                // X Axis:
 
                 if (x > 2)
                 {
                     if (newBoard[y][x].type == newBoard[y][x - 1].type
-                        && newBoard[y][x - 2].type == 11
+                        && newBoard[y][x - 2].type == 14
                         && newBoard[y][x].type == newBoard[y][x - 3].type)
                     {
                         return true;
                     }
                     else if (newBoard[y][x].type == newBoard[y][x - 2].type
-                        && newBoard[y][x - 1].type == 11
+                        && newBoard[y][x - 1].type == 14
                         && newBoard[y][x].type == newBoard[y][x - 3].type)
+                    {
+                        return true;
+                    }
+
+                    if (newBoard[y][x].type == specialColorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == specialColorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == specialColorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == specialColorNumber)
                     {
                         return true;
                     }
@@ -51,20 +192,43 @@ public class GameController
                 }
 
 
-                ////////////////////////
+                // Y Axis:
 
 
                 if (y > 2)
                 {
                     if (newBoard[y][x].type == newBoard[y - 1][x].type
-                    && newBoard[y - 2][x].type == 11
+                    && newBoard[y - 2][x].type == 14
                     && newBoard[y][x].type == newBoard[y - 3][x].type)
                     {
                         return true;
                     }
                     else if (newBoard[y][x].type == newBoard[y - 2][x].type
-                        && newBoard[y - 1][x].type == 11
+                        && newBoard[y - 1][x].type == 14
                         && newBoard[y][x].type == newBoard[y - 3][x].type)
+                    {
+                        return true;
+                    }
+
+                    if (newBoard[y][x].type == specialColorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == specialColorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == specialColorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == specialColorNumber)
                     {
                         return true;
                     }
@@ -76,21 +240,6 @@ public class GameController
                 {
                     return true;
                 }
-
-                // Original:
-                //
-                // if (x > 1
-                //     && newBoard[y][x].type == newBoard[y][x - 1].type
-                //     && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
-                // {
-                //     return true;
-                // }
-                // if (y > 1
-                //     && newBoard[y][x].type == newBoard[y - 1][x].type
-                //     && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
-                // {
-                //     return true;
-                // }
             }
         }
         return false;
@@ -175,9 +324,9 @@ public class GameController
                         int _tileType = 0;
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
-                            _tileType = Random.Range(0, _tilesTypes.Count);
+                            _tileType = Random.Range(0 + 4, _tilesTypes.Count);
                         else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
-                            _tileType = Random.Range(0, _tilesTypes.Count - 2);
+                            _tileType = Random.Range(0, _tilesTypes.Count - 3);
 
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
@@ -232,24 +381,85 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
+                switch (newBoard[y][x].type)
+                {
+                    case 0:
+                        colorNumber = yellowNumber;
+                        specialColorNumber = specialYellowNumber;
+                        break;
+                    case 1:
+                        colorNumber = blueNumber;
+                        specialColorNumber = specialBlueNumber;
+                        break;
+                    case 2:
+                        colorNumber = greenNumber;
+                        specialColorNumber = specialGreenNumber;
+                        break;
+                    case 3:
+                        colorNumber = orangeNumber;
+                        specialColorNumber = specialOrangeNumber;
+                        break;
+                    case 4:
+                        colorNumber = pinkNumber;
+                        specialColorNumber = specialPinkNumber;
+                        break;
+                    case 5:
+                        colorNumber = purpleNumber;
+                        specialColorNumber = specialPurpleNumber;
+                        break;
+                    case 6:
+                        colorNumber = redNumber;
+                        specialColorNumber = specialRedNumber;
+                        break;
+                    case 7:
+                        colorNumber = specialYellowNumber;
+                        specialColorNumber = specialYellowNumber;
+                        break;
+                    case 8:
+                        colorNumber = specialBlueNumber;
+                        specialColorNumber = specialBlueNumber;
+                        break;
+                    case 9:
+                        colorNumber = specialGreenNumber;
+                        specialColorNumber = specialGreenNumber;
+                        break;
+                    case 10:
+                        colorNumber = specialOrangeNumber;
+                        specialColorNumber = specialOrangeNumber;
+                        break;
+                    case 11:
+                        colorNumber = specialPinkNumber;
+                        specialColorNumber = specialPinkNumber;
+                        break;
+                    case 12:
+                        colorNumber = specialPurpleNumber;
+                        specialColorNumber = specialPurpleNumber;
+                        break;
+                    case 13:
+                        colorNumber = specialRedNumber;
+                        specialColorNumber = -1;
+                        break;
+                }
+
+                // X Axis:
 
                 if (x > 2)
                 {
-                    if (newBoard[y][x].type == 11
+                    if (newBoard[y][x].type == 14
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type
                         && newBoard[y][x - 2].type == newBoard[y][x - 3].type
                         ||
                         newBoard[y][x].type == newBoard[y][x - 2].type
-                        && newBoard[y][x - 1].type == 11
+                        && newBoard[y][x - 1].type == 14
                         && newBoard[y][x].type == newBoard[y][x - 3].type
                         ||
                         newBoard[y][x].type == newBoard[y][x - 1].type
-                        && newBoard[y][x - 2].type == 11
+                        && newBoard[y][x - 2].type == 14
                         && newBoard[y][x].type == newBoard[y][x - 3].type
                         ||
                         newBoard[y][x].type == newBoard[y][x - 1].type
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type
-                        && newBoard[y][x - 3].type == 11)
+                        && newBoard[y][x - 3].type == 14)
                     {
                         for (int t = 0; t < newBoard.Count; t++)
                         {
@@ -259,7 +469,40 @@ public class GameController
                             }
                         }
                     }
+
+                    if (newBoard[y][x].type == specialColorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == specialColorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == specialColorNumber
+                        && newBoard[y][x - 3].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y][x - 1].type == colorNumber
+                        && newBoard[y][x - 2].type == colorNumber
+                        && newBoard[y][x - 3].type == specialColorNumber)
+                    {
+                        for (int j = 0; j < newBoard.Count; j++)
+                        {
+                            for (int i = 0; i < newBoard.Count; i++)
+                            {
+                                if (newBoard[j][i].type == colorNumber || newBoard[j][i].type == specialColorNumber)
+                                {
+                                    matchedTiles[j][i] = true;
+                                }
+                            }
+                        }
+                    }
                 }
+
                 if (x > 1
                         && newBoard[y][x].type == newBoard[y][x - 1].type
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
@@ -269,27 +512,25 @@ public class GameController
                     matchedTiles[y][x - 2] = true;
                 }
 
-
-                ////////////////////////
-
+                // Y Axis:
 
                 if (y > 2)
                 {
-                    if (newBoard[y][x].type == 11
+                    if (newBoard[y][x].type == 14
                         && newBoard[y - 1][x].type == newBoard[y - 2][x].type
                         && newBoard[y - 2][x].type == newBoard[y - 3][x].type
                         ||
                         newBoard[y][x].type == newBoard[y - 2][x].type
-                        && newBoard[y - 1][x].type == 11
+                        && newBoard[y - 1][x].type == 14
                         && newBoard[y][x].type == newBoard[y - 3][x].type
                         ||
                         newBoard[y][x].type == newBoard[y - 1][x].type
-                        && newBoard[y - 2][x].type == 11
+                        && newBoard[y - 2][x].type == 14
                         && newBoard[y][x].type == newBoard[y - 3][x].type
                         ||
                         newBoard[y][x].type == newBoard[y - 1][x].type
                         && newBoard[y - 1][x].type == newBoard[y - 2][x].type
-                        && newBoard[y - 3][x].type == 11)
+                        && newBoard[y - 3][x].type == 14)
                     {
                         for (int t = 0; t < newBoard.Count; t++)
                         {
@@ -299,7 +540,40 @@ public class GameController
                             }
                         }
                     }
+
+                    if (newBoard[y][x].type == specialColorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == specialColorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == specialColorNumber
+                        && newBoard[y - 3][x].type == colorNumber
+                        ||
+                        newBoard[y][x].type == colorNumber
+                        && newBoard[y - 1][x].type == colorNumber
+                        && newBoard[y - 2][x].type == colorNumber
+                        && newBoard[y - 3][x].type == specialColorNumber)
+                    {
+                        for (int j = 0; j < newBoard.Count; j++)
+                        {
+                            for (int i = 0; i < newBoard.Count; i++)
+                            {
+                                if (newBoard[j][i].type == colorNumber || newBoard[j][i].type == specialColorNumber)
+                                {
+                                    matchedTiles[j][i] = true;
+                                }
+                            }
+                        }
+                    }
                 }
+
                 if (y > 1
                     && newBoard[y][x].type == newBoard[y - 1][x].type
                     && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
@@ -309,27 +583,6 @@ public class GameController
                     matchedTiles[y - 2][x] = true;
                 }
             }
-
-            /*
-            Original:
-
-            if (x > 1
-                && newBoard[y][x].type == newBoard[y][x - 1].type
-                && newBoard[y][x - 1].type == newBoard[y][x - 2].type)
-            {
-                matchedTiles[y][x] = true;
-                matchedTiles[y][x - 1] = true;
-                matchedTiles[y][x - 2] = true;
-            }
-            if (y > 1
-                && newBoard[y][x].type == newBoard[y - 1][x].type
-                && newBoard[y - 1][x].type == newBoard[y - 2][x].type)
-            {
-                matchedTiles[y][x] = true;
-                matchedTiles[y - 1][x] = true;
-                matchedTiles[y - 2][x] = true;
-            }
-            */
         }
 
         return matchedTiles;
@@ -386,18 +639,19 @@ public class GameController
                 }
 
                 if (x > 2
-                   && board[y][x - 2].type == 11
+                   && board[y][x - 2].type == specialColorNumber
                    ||
                    x > 2
-                   && board[y][x - 3].type == 11)
+                   && board[y][x - 3].type == specialColorNumber)
                 {
                     noMatchTypes.Remove(board[y][x - 2].type);
                 }
+
                 if (y > 2
-                    && board[y - 2][x].type == 11
+                    && board[y - 2][x].type == 14
                     ||
                     y > 2
-                    && board[y - 3][x].type == 11)
+                    && board[y - 3][x].type == 14)
                 {
                     noMatchTypes.Remove(board[y - 2][x].type);
                 }
@@ -408,11 +662,11 @@ public class GameController
                 float _rand = Random.value;
                 if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
+                    board[y][x].type = noMatchTypes[Random.Range(0 + 4, noMatchTypes.Count)];
                 }
                 else if (_rand <= ScoreManager.instance.levelRules.colorsProbability)
                 {
-                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 2)];
+                    board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count - 3)];
                 }
 
             }
