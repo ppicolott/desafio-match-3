@@ -15,6 +15,7 @@ MonoBehaviour:
   pointsPerTile: 10
   specialColorsProbability: 0.05
   colorsProbability: 1
+  bombRange: 2
   yellow: 1
   blue: 1
   green: 1

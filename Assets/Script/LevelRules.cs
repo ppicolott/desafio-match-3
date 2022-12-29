@@ -9,6 +9,7 @@ public class LevelRules : ScriptableObject
     public int pointsPerTile;
     public float specialColorsProbability;
     public float colorsProbability;
+    public int bombRange;
 
     [Space(10)]
     [Header("Common Colors")]

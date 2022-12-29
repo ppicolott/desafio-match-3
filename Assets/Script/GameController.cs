@@ -448,11 +448,9 @@ public class GameController
                         && newBoard[y][x - 3].type == 15)
                     {
 
-                        int _bombRange = 3;
-
-                        for (int j = (y - _bombRange); j < (y + _bombRange); j++)
+                        for (int j = y - ScoreManager.instance.levelRules.bombRange; j < y + ScoreManager.instance.levelRules.bombRange; j++)
                         {
-                            for (int i = (x - _bombRange); i < (x + _bombRange); i++)
+                            for (int i = x - ScoreManager.instance.levelRules.bombRange; i < x + ScoreManager.instance.levelRules.bombRange; i++)
                             {
                                 if (j > -1 && j < 10 && i > -1 && i < 10)
                                 {
@@ -558,11 +556,9 @@ public class GameController
                         && newBoard[y - 3][x].type == 15)
                     {
 
-                        int _bombRange = 2;
-
-                        for (int j = (y - _bombRange); j < (y + _bombRange); j++)
+                        for (int j = y - ScoreManager.instance.levelRules.bombRange; j < y + ScoreManager.instance.levelRules.bombRange; j++)
                         {
-                            for (int i = (x - _bombRange); i < (x + _bombRange); i++)
+                            for (int i = x - ScoreManager.instance.levelRules.bombRange; i < x + ScoreManager.instance.levelRules.bombRange; i++)
                             {
                                 if (j > -1 && j < 10 && i > -1 && i < 10)
                                 {
