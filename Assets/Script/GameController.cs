@@ -334,8 +334,8 @@ public class GameController
 
                         int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
 
-                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)]; // - 1
-                        int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
+                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)];
+                        int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count - 1)];
 
                         float _rand = Random.value;
                         if (_rand <= ScoreManager.instance.levelRules.specialColorsProbability)
@@ -666,59 +666,64 @@ public class GameController
                     noMatchTypes.Add(_tilesTypes[i]);
                 }
 
-                // Removing special colors that would trigger a match
+                // Removes special color tiles
+                int _startingColor = levelColors.Count - specialLevelColors.Count;
+                int _scn = 0;
 
-                checkCorrespondent(board[y][x].type);
-
-                if (x > 2
-                   && board[y][x - 1].type == board[y][x - 3].type
-                   && board[y][x - 2].type == specialColorNumber)
+                for (int i = _startingColor; i < levelColors.Count; i++)
                 {
+                    _scn = levelColors[i];
+
+                    if (x > 2
+                        && board[y][x].type == board[y][x - 2].type
+                        && board[y][x - 2].type == board[y][x - 3].type
+                        && board[y][x - 1].type == _scn)
+                    {
+                        noMatchTypes.Remove(board[y][x - 1].type);
+                    }
+                    if (x > 2
+                        && board[y][x].type == board[y][x - 1].type
+                        && board[y][x - 1].type == board[y][x - 3].type
+                        && board[y][x - 2].type == _scn)
+                    {
+                        noMatchTypes.Remove(board[y][x - 2].type);
+                    }
+                    if (y > 2
+                        && board[y][x].type == board[y - 2][x].type
+                        && board[y - 2][x].type == board[y - 3][x].type
+                        && board[y - 1][x].type == _scn)
+                    {
+                        noMatchTypes.Remove(board[y - 1][x].type);
+                    }
+                    if (y > 2
+                        && board[y][x].type == board[y - 1][x].type
+                        && board[y - 1][x].type == board[y - 3][x].type
+                        && board[y - 2][x].type == _scn)
+                    {
+                        noMatchTypes.Remove(board[y - 2][x].type);
+                    }
+                }
+
+                // Removes 4 tiles of same color in a row/column
+                if (x > 2
+                && board[y][x].type == board[y][x - 1].type
+                && board[y][x - 1].type == board[y][x - 2].type
+                && board[y][x - 2].type == board[y][x - 3].type)
+                {
+                    noMatchTypes.Remove(board[y][x - 1].type);
                     noMatchTypes.Remove(board[y][x - 2].type);
                 }
                 if (y > 2
-                   && board[y - 1][x].type == board[y - 3][x].type
-                   && board[y - 2][x].type == specialColorNumber)
+                    && board[y][x].type == board[y - 1][x].type
+                    && board[y - 1][x].type == board[y - 2][x].type
+                    && board[y - 2][x].type == board[y - 3][x].type)
                 {
-                    noMatchTypes.Remove(board[y - 2][x].type);
-                }
-                // Special 14, line cleaner, and 15, bomb
-                if (x > 2
-                   && board[y][x - 1].type == board[y][x - 3].type
-                   && board[y][x - 2].type == 14
-                   ||
-                   x > 2
-                   && board[y][x - 1].type == board[y][x - 3].type
-                   && board[y][x - 2].type == 15)
-                {
-                    noMatchTypes.Remove(board[y][x - 2].type);
-                }
-                if (y > 2
-                   && board[y - 1][x].type == board[y - 3][x].type
-                   && board[y - 2][x].type == 14
-                   ||
-                   y > 2
-                   && board[y - 1][x].type == board[y - 3][x].type
-                   && board[y - 2][x].type == 15)
-                {
+                    noMatchTypes.Remove(board[y - 1][x].type);
                     noMatchTypes.Remove(board[y - 2][x].type);
                 }
 
-                // Match 4
-
-                if (x > 2
-                    && board[y][x - 1].type == board[y][x - 2].type)
-                {
-                    noMatchTypes.Remove(board[y][x - 2].type);
-                }
-                if (y > 2
-                    && board[y - 1][x].type == board[y - 2][x].type)
-                {
-                    noMatchTypes.Remove(board[y - 2][x].type);
-                }
 
                 // Match 3 - Original:
-
                 if (x > 1
                     && board[y][x - 1].type == board[y][x - 2].type)
                 {
@@ -737,8 +742,8 @@ public class GameController
 
                 int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
 
-                int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
-                int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
+                int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)];
+                int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count - 1)];
 
                 foreach (int item in levelColors)
                 {
