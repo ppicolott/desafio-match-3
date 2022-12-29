@@ -5,22 +5,6 @@ using static UnityEditor.Progress;
 
 public class GameController
 {
-    private List<List<Tile>> _boardTiles;
-    private List<int> _tilesTypes;
-    private int _tileCount;
-
-    private List<bool> commonColors;
-    private int commonColorsTrue = 0;
-    private List<bool> specialColors;
-    private int specialColorsTrue = 0;
-
-    private List<bool> designedColors;
-    private List<int> levelColors;
-    private List<int> commonLevelColors;
-    private List<int> specialLevelColors;
-    private int commonListIndex;
-    private int specialListIndex;
-
     private static int colorNumber;
     private static int specialColorNumber;
 
@@ -40,56 +24,20 @@ public class GameController
     private static int specialPurpleNumber = 12;
     private static int specialRedNumber = 13;
 
-    // private static int lineCleaner = 14;
-    // private static int bomb = 15;
+    private int commonListIndex;
+    private int specialListIndex;
+    private List<bool> designedColors;
+    private List<int> levelColors;
+    private List<int> specialLevelColors;
+    private List<bool> specialColors;
+
+    private int _tileCount;
+    private List<List<Tile>> _boardTiles;
+    private List<int> _tilesTypes;
 
     public List<List<Tile>> StartGame(int boardWidth, int boardHeight)
     {
-        // Defining probability of common colors being displayed
-        commonLevelColors = new List<int>();
-        commonColors = new List<bool>()
-        {
-            ScoreManager.instance.levelRules.yellow,
-            ScoreManager.instance.levelRules.blue,
-            ScoreManager.instance.levelRules.green,
-            ScoreManager.instance.levelRules.orange,
-            ScoreManager.instance.levelRules.pink,
-            ScoreManager.instance.levelRules.purple,
-            ScoreManager.instance.levelRules.red,
-        };
-        for (int i = 0; i < commonColors.Count; i++)
-        {
-            if (commonColors[i])
-            {
-                commonColorsTrue += 1;
-                commonLevelColors.Add(i);
-            }
-        }
-
-        // Defining probability of special colors being displayed
-        specialLevelColors = new List<int>();
-        specialColors = new List<bool>()
-        {
-            ScoreManager.instance.levelRules.specialYellow,
-            ScoreManager.instance.levelRules.specialBlue,
-            ScoreManager.instance.levelRules.specialGreen,
-            ScoreManager.instance.levelRules.specialOrange,
-            ScoreManager.instance.levelRules.specialPink,
-            ScoreManager.instance.levelRules.specialPurple,
-            ScoreManager.instance.levelRules.specialRed,
-            ScoreManager.instance.levelRules.lineCleaner,
-            ScoreManager.instance.levelRules.bomb,
-        };
-        for (int i = 0; i < specialColors.Count; i++)
-        {
-            if (specialColors[i])
-            {
-                specialColorsTrue += 1;
-                specialLevelColors.Add(i);
-            }
-        }
-
-        // Adding color index to _tilesTypes, in order to display only selected colors
+        // Adding color index to _tilesTypes, in order to display only selected colors on scriptable objects
         designedColors = new List<bool>()
         {
             ScoreManager.instance.levelRules.yellow,
@@ -123,6 +71,28 @@ public class GameController
         //     Debug.Log(item);
         // }
 
+        // This list will help define probability of special colors being displayed
+        specialLevelColors = new List<int>();
+        specialColors = new List<bool>()
+        {
+            ScoreManager.instance.levelRules.specialYellow,
+            ScoreManager.instance.levelRules.specialBlue,
+            ScoreManager.instance.levelRules.specialGreen,
+            ScoreManager.instance.levelRules.specialOrange,
+            ScoreManager.instance.levelRules.specialPink,
+            ScoreManager.instance.levelRules.specialPurple,
+            ScoreManager.instance.levelRules.specialRed,
+            ScoreManager.instance.levelRules.lineCleaner,
+            ScoreManager.instance.levelRules.bomb,
+        };
+        for (int i = 0; i < specialColors.Count; i++)
+        {
+            if (specialColors[i])
+            {
+                specialLevelColors.Add(i);
+            }
+        }
+
         // Original:
         // _tilesTypes = new List<int> { 0, 1, 2, 3, };
         _tilesTypes = levelColors;
@@ -142,73 +112,7 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
-                switch (newBoard[y][x].type)
-                {
-                    case 0:
-                        colorNumber = yellowNumber;
-                        specialColorNumber = specialYellowNumber;
-                        break;
-                    case 1:
-                        colorNumber = blueNumber;
-                        specialColorNumber = specialBlueNumber;
-                        break;
-                    case 2:
-                        colorNumber = greenNumber;
-                        specialColorNumber = specialGreenNumber;
-                        break;
-                    case 3:
-                        colorNumber = orangeNumber;
-                        specialColorNumber = specialOrangeNumber;
-                        break;
-                    case 4:
-                        colorNumber = pinkNumber;
-                        specialColorNumber = specialPinkNumber;
-                        break;
-                    case 5:
-                        colorNumber = purpleNumber;
-                        specialColorNumber = specialPurpleNumber;
-                        break;
-                    case 6:
-                        colorNumber = redNumber;
-                        specialColorNumber = specialRedNumber;
-                        break;
-                    case 7:
-                        colorNumber = specialYellowNumber;
-                        specialColorNumber = specialYellowNumber;
-                        break;
-                    case 8:
-                        colorNumber = specialBlueNumber;
-                        specialColorNumber = specialBlueNumber;
-                        break;
-                    case 9:
-                        colorNumber = specialGreenNumber;
-                        specialColorNumber = specialGreenNumber;
-                        break;
-                    case 10:
-                        colorNumber = specialOrangeNumber;
-                        specialColorNumber = specialOrangeNumber;
-                        break;
-                    case 11:
-                        colorNumber = specialPinkNumber;
-                        specialColorNumber = specialPinkNumber;
-                        break;
-                    case 12:
-                        colorNumber = specialPurpleNumber;
-                        specialColorNumber = specialPurpleNumber;
-                        break;
-                    case 13:
-                        colorNumber = specialRedNumber;
-                        specialColorNumber = specialRedNumber;
-                        break;
-                    case 14:
-                        colorNumber = 14;
-                        specialColorNumber = -1;
-                        break;
-                    case 15:
-                        colorNumber = 15;
-                        specialColorNumber = -1;
-                        break;
-                }
+                checkCorrespondent(newBoard[y][x].type);
 
                 // X Axis:
 
@@ -277,9 +181,7 @@ public class GameController
                     return true;
                 }
 
-
                 // Y Axis:
-
 
                 if (y > 2)
                 {
@@ -432,7 +334,7 @@ public class GameController
 
                         int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
 
-                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
+                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)]; // - 1
                         int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
 
                         float _rand = Random.value;
@@ -448,7 +350,7 @@ public class GameController
                         Tile tile = newBoard[y][x];
                         tile.id = _tileCount++;
                         // Original:
-                        //tile.type = _tilesTypes[_tileType];
+                        // tile.type = _tilesTypes[_tileType];
                         tile.type = _tileType;
                         addedTiles.Add(new AddedTileInfo
                         {
@@ -498,73 +400,7 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
-                switch (newBoard[y][x].type)
-                {
-                    case 0:
-                        colorNumber = yellowNumber;
-                        specialColorNumber = specialYellowNumber;
-                        break;
-                    case 1:
-                        colorNumber = blueNumber;
-                        specialColorNumber = specialBlueNumber;
-                        break;
-                    case 2:
-                        colorNumber = greenNumber;
-                        specialColorNumber = specialGreenNumber;
-                        break;
-                    case 3:
-                        colorNumber = orangeNumber;
-                        specialColorNumber = specialOrangeNumber;
-                        break;
-                    case 4:
-                        colorNumber = pinkNumber;
-                        specialColorNumber = specialPinkNumber;
-                        break;
-                    case 5:
-                        colorNumber = purpleNumber;
-                        specialColorNumber = specialPurpleNumber;
-                        break;
-                    case 6:
-                        colorNumber = redNumber;
-                        specialColorNumber = specialRedNumber;
-                        break;
-                    case 7:
-                        colorNumber = specialYellowNumber;
-                        specialColorNumber = specialYellowNumber;
-                        break;
-                    case 8:
-                        colorNumber = specialBlueNumber;
-                        specialColorNumber = specialBlueNumber;
-                        break;
-                    case 9:
-                        colorNumber = specialGreenNumber;
-                        specialColorNumber = specialGreenNumber;
-                        break;
-                    case 10:
-                        colorNumber = specialOrangeNumber;
-                        specialColorNumber = specialOrangeNumber;
-                        break;
-                    case 11:
-                        colorNumber = specialPinkNumber;
-                        specialColorNumber = specialPinkNumber;
-                        break;
-                    case 12:
-                        colorNumber = specialPurpleNumber;
-                        specialColorNumber = specialPurpleNumber;
-                        break;
-                    case 13:
-                        colorNumber = specialRedNumber;
-                        specialColorNumber = specialRedNumber;
-                        break;
-                    case 14:
-                        colorNumber = 14;
-                        specialColorNumber = -1;
-                        break;
-                    case 15:
-                        colorNumber = 15;
-                        specialColorNumber = -1;
-                        break;
-                }
+                checkCorrespondent(newBoard[y][x].type);
 
                 // X Axis:
 
@@ -611,30 +447,17 @@ public class GameController
                         && newBoard[y][x - 1].type == newBoard[y][x - 2].type
                         && newBoard[y][x - 3].type == 15)
                     {
-                        int bombRange = 0;
 
-                        if (y > 3 && x > 3)
-                        {
-                            bombRange = 2;
-                        }
-                        else if (y == 0 || x == 0)
-                        {
-                            bombRange = 0;
-                        }
-                        else if (y == 10 || x == 10)
-                        {
-                            bombRange = 0;
-                        }
-                        else
-                        {
-                            bombRange = 1;
-                        }
+                        int _bombRange = 3;
 
-                        for (int j = y - bombRange; j < y + bombRange; j++)
+                        for (int j = (y - _bombRange); j < (y + _bombRange); j++)
                         {
-                            for (int i = x - bombRange; i < x + bombRange; i++)
+                            for (int i = (x - _bombRange); i < (x + _bombRange); i++)
                             {
-                                matchedTiles[j][i] = true;
+                                if (j > -1 && j < 10 && i > -1 && i < 10)
+                                {
+                                    matchedTiles[j][i] = true;
+                                }
                             }
                         }
 
@@ -734,30 +557,17 @@ public class GameController
                         && newBoard[y - 1][x].type == newBoard[y - 2][x].type
                         && newBoard[y - 3][x].type == 15)
                     {
-                        int bombRange = 0;
 
-                        if (y > 3 && x > 3)
-                        {
-                            bombRange = 2;
-                        }
-                        else if (y == 0 || x == 0)
-                        {
-                            bombRange = 0;
-                        }
-                        else if (y == 10 || x == 10)
-                        {
-                            bombRange = 0;
-                        }
-                        else
-                        {
-                            bombRange = 1;
-                        }
+                        int _bombRange = 2;
 
-                        for (int j = y - bombRange; j < y + bombRange; j++)
+                        for (int j = (y - _bombRange); j < (y + _bombRange); j++)
                         {
-                            for (int i = x - bombRange; i < x + bombRange; i++)
+                            for (int i = (x - _bombRange); i < (x + _bombRange); i++)
                             {
-                                matchedTiles[j][i] = true;
+                                if (j > -1 && j < 10 && i > -1 && i < 10)
+                                {
+                                    matchedTiles[j][i] = true;
+                                }
                             }
                         }
 
@@ -856,6 +666,59 @@ public class GameController
                     noMatchTypes.Add(_tilesTypes[i]);
                 }
 
+                // Removing special colors that would trigger a match
+
+                checkCorrespondent(board[y][x].type);
+
+                if (x > 2
+                   && board[y][x - 1].type == board[y][x - 3].type
+                   && board[y][x - 2].type == specialColorNumber)
+                {
+                    noMatchTypes.Remove(board[y][x - 2].type);
+                }
+                if (y > 2
+                   && board[y - 1][x].type == board[y - 3][x].type
+                   && board[y - 2][x].type == specialColorNumber)
+                {
+                    noMatchTypes.Remove(board[y - 2][x].type);
+                }
+                // Special 14, line cleaner, and 15, bomb
+                if (x > 2
+                   && board[y][x - 1].type == board[y][x - 3].type
+                   && board[y][x - 2].type == 14
+                   ||
+                   x > 2
+                   && board[y][x - 1].type == board[y][x - 3].type
+                   && board[y][x - 2].type == 15)
+                {
+                    noMatchTypes.Remove(board[y][x - 2].type);
+                }
+                if (y > 2
+                   && board[y - 1][x].type == board[y - 3][x].type
+                   && board[y - 2][x].type == 14
+                   ||
+                   y > 2
+                   && board[y - 1][x].type == board[y - 3][x].type
+                   && board[y - 2][x].type == 15)
+                {
+                    noMatchTypes.Remove(board[y - 2][x].type);
+                }
+
+                // Match 4
+
+                if (x > 2
+                    && board[y][x - 1].type == board[y][x - 2].type)
+                {
+                    noMatchTypes.Remove(board[y][x - 2].type);
+                }
+                if (y > 2
+                    && board[y - 1][x].type == board[y - 2][x].type)
+                {
+                    noMatchTypes.Remove(board[y - 2][x].type);
+                }
+
+                // Match 3 - Original:
+
                 if (x > 1
                     && board[y][x - 1].type == board[y][x - 2].type)
                 {
@@ -867,32 +730,13 @@ public class GameController
                     noMatchTypes.Remove(board[y - 1][x].type);
                 }
 
-                if (x > 2
-                   && board[y][x - 2].type == specialColorNumber
-                   ||
-                   x > 2
-                   && board[y][x - 3].type == specialColorNumber)
-                {
-                    noMatchTypes.Remove(board[y][x - 2].type);
-                }
-
-                if (y > 2
-                    && board[y - 2][x].type == 14
-                    ||
-                    y > 2
-                    && board[y - 3][x].type == 14)
-                {
-                    noMatchTypes.Remove(board[y - 2][x].type);
-                }
-
                 board[y][x].id = _tileCount++;
-
 
                 // Original:
                 // board[y][x].type = noMatchTypes[Random.Range(0, noMatchTypes.Count)];
 
                 int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
-                
+
                 int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
                 int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count)];
 
@@ -920,5 +764,76 @@ public class GameController
         }
 
         return board;
+    }
+
+    private static void checkCorrespondent(int _type)
+    {
+        switch (_type)
+        {
+            case 0:
+                colorNumber = yellowNumber;
+                specialColorNumber = specialYellowNumber;
+                break;
+            case 1:
+                colorNumber = blueNumber;
+                specialColorNumber = specialBlueNumber;
+                break;
+            case 2:
+                colorNumber = greenNumber;
+                specialColorNumber = specialGreenNumber;
+                break;
+            case 3:
+                colorNumber = orangeNumber;
+                specialColorNumber = specialOrangeNumber;
+                break;
+            case 4:
+                colorNumber = pinkNumber;
+                specialColorNumber = specialPinkNumber;
+                break;
+            case 5:
+                colorNumber = purpleNumber;
+                specialColorNumber = specialPurpleNumber;
+                break;
+            case 6:
+                colorNumber = redNumber;
+                specialColorNumber = specialRedNumber;
+                break;
+            case 7:
+                colorNumber = specialYellowNumber;
+                specialColorNumber = specialYellowNumber;
+                break;
+            case 8:
+                colorNumber = specialBlueNumber;
+                specialColorNumber = specialBlueNumber;
+                break;
+            case 9:
+                colorNumber = specialGreenNumber;
+                specialColorNumber = specialGreenNumber;
+                break;
+            case 10:
+                colorNumber = specialOrangeNumber;
+                specialColorNumber = specialOrangeNumber;
+                break;
+            case 11:
+                colorNumber = specialPinkNumber;
+                specialColorNumber = specialPinkNumber;
+                break;
+            case 12:
+                colorNumber = specialPurpleNumber;
+                specialColorNumber = specialPurpleNumber;
+                break;
+            case 13:
+                colorNumber = specialRedNumber;
+                specialColorNumber = specialRedNumber;
+                break;
+            case 14:
+                colorNumber = 14;
+                specialColorNumber = 14;
+                break;
+            case 15:
+                colorNumber = 15;
+                specialColorNumber = 15;
+                break;
+        }
     }
 }
