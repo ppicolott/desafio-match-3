@@ -7,8 +7,9 @@ public class LevelRules : ScriptableObject
     [Header("Statics")]
     [Space(5)]
     public int pointsPerTile;
+    public int goalScore;
     public float specialColorsProbability;
-    public float colorsProbability;
+    public float colorsProbability = 1;
     public int bombRange;
 
     [Space(10)]
