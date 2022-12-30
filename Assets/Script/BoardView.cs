@@ -47,6 +47,9 @@ public class BoardView : MonoBehaviour
                     tileSpot.SetTile(tile);
 
                     _tiles[y][x] = tile;
+
+                    // (In progress)
+                    tileSpot.SetType(board[y][x].type);
                 }
             }
         }
@@ -138,6 +141,9 @@ public class BoardView : MonoBehaviour
 
             tile.transform.localScale = Vector2.zero;
             seq.Join(tile.transform.DOScale(1.0f, 0.2f));
+
+            // (In progress)
+            tileSpot.SetType(addedTileInfo.type);
         }
 
         return seq;

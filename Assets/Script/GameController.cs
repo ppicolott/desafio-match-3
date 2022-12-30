@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -111,7 +112,7 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
-                checkCorrespondent(newBoard[y][x].type);
+                CheckCorrespondent(newBoard[y][x].type);
 
                 // X Axis:
 
@@ -333,7 +334,7 @@ public class GameController
 
                         int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
 
-                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)];
+                        int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
                         int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count - 1)];
 
                         float _rand = Random.value;
@@ -399,7 +400,7 @@ public class GameController
         {
             for (int x = 0; x < newBoard[y].Count; x++)
             {
-                checkCorrespondent(newBoard[y][x].type);
+                CheckCorrespondent(newBoard[y][x].type);
 
                 // X Axis:
 
@@ -465,6 +466,8 @@ public class GameController
                                 matchedTiles[y][x - n] = true;
                             }
                         }
+
+                        GameHandler.instance.ExplosionAnimation();
                     }
 
                     if (newBoard[y][x].type == specialColorNumber
@@ -573,6 +576,8 @@ public class GameController
                                 matchedTiles[y - n][x] = true;
                             }
                         }
+
+                        GameHandler.instance.ExplosionAnimation();
                     }
 
                     if (newBoard[y][x].type == specialColorNumber
@@ -737,7 +742,7 @@ public class GameController
 
                 int _maxCommonColors = levelColors.Count - specialLevelColors.Count;
 
-                int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors)];
+                int _randomCommonColor = levelColors[Random.Range(0, _maxCommonColors - 1)];
                 int _randomSpecialColor = levelColors[Random.Range(_maxCommonColors, levelColors.Count - 1)];
 
                 foreach (int item in levelColors)
@@ -766,7 +771,7 @@ public class GameController
         return board;
     }
 
-    private static void checkCorrespondent(int _type)
+    private static void CheckCorrespondent(int _type)
     {
         switch (_type)
         {

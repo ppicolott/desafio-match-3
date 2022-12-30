@@ -566,6 +566,7 @@ MonoBehaviour:
   boardWidth: 10
   boardHeight: 10
   boardView: {fileID: 220631842}
+  _boardContainer: {fileID: 0}
 --- !u!114 &716047907
 MonoBehaviour:
   m_ObjectHideFlags: 0

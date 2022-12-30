@@ -38,7 +38,7 @@ public class ScoreManager : MonoBehaviour
             case "LevelTwo":
                 if (score >= levelRules.goalScore)
                 {
-                    SceneManager.LoadScene("LevelThree");
+                    // SceneManager.LoadScene("LevelThree");
                 }
                 break;
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -14,10 +13,19 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] public BoardView boardView;
 
+
+    public static GameHandler instance;
+
+    public GameObject _boardContainer;
+
+
     private void Awake()
     {
         gameController = new GameController();
         boardView.onTileClick += OnTileClick;
+
+        instance = this;
+        _boardContainer = GameObject.Find("BoardContainer");
     }
 
     private void Start()
@@ -92,5 +100,11 @@ public class GameHandler : MonoBehaviour
 
         // Add points, after animation, to the score based on how many tiles were cleared/destroyed each sequence
         ScoreManager.instance.AddScore(boardSequence.matchedPosition.Count);
+    }
+
+    public void ExplosionAnimation()
+    {
+        _boardContainer.transform.DOShakePosition(.75f, 20f, 10, 90, false, true)
+            .OnComplete(() => _boardContainer.transform.position = Vector3.zero);
     }
 }

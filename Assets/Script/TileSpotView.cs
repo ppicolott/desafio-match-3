@@ -10,7 +10,7 @@ public class TileSpotView : MonoBehaviour
     private int _x;
     private int _y;
 
-    private int _name;
+    public int _type;
 
     public event Action<int, int> onClick;
 
@@ -29,6 +29,10 @@ public class TileSpotView : MonoBehaviour
         _x = x;
         _y = y;
     }
+    public void SetType(int type)
+    {
+        _type = type;
+    }
 
     public void SetTile(TileView tile)
     {
@@ -42,5 +46,4 @@ public class TileSpotView : MonoBehaviour
         tile.transform.DOKill();
         return tile.transform.DOMove(transform.position, 0.3f);
     }
-
 }
