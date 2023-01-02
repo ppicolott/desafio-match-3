@@ -8,10 +8,10 @@
 ### Use the white circle to clean vertical or horizontal lines, when matching more than three objects of same color
 ![Match-3-LineCleaner](/LineCleaner.gif?raw=true "LineCleaner")
 
-### Use the gray circle, the bomb, to explode near objects, when matching more than three objects of same color
+### Use the gray circle, the bomb, to explode nearby objects, when matching more than three objects of same color
 ![Match-3-Bomb](/Bomb.gif?raw=true "Bomb")
 
-### Use the colored circles to clean all objects of circle same color, when matching more than three objects of same color
+### Use the colored circles to clean all objects of same color, when matching more than three objects of same color
 ![Match-3-ColorCleaner](/ColorCleaner.gif?raw=true "ColorCleaner")
 
 ## Original
