@@ -11,7 +11,7 @@
 ### Use the gray circle, the bomb, to explode near objects
 ![Match-3-Bomb](/Bomb.gif?raw=true "Bomb")
 
-### Use the colored circles to clean all objects of circle's same color
+### Use the colored circles to clean all objects of circle same color
 ![Match-3-ColorCleaner](/ColorCleaner.gif?raw=true "ColorCleaner")
 
 ## Original
