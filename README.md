@@ -14,6 +14,9 @@
 ### Use the colored circles to clean all objects of same color, when matching more than three objects of same color
 ![Match-3-ColorCleaner](/ColorCleaner.gif?raw=true "ColorCleaner")
 
+### Scriptable Object containing level rules
+![Match-3-ScriptableObject](/ScriptableObject.png?raw=true "ScriptableObject")
+
 ## Original
 ![Match-3](/Match3.png?raw=true "Match-3")
 
